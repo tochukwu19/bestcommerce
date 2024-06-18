@@ -1,0 +1,11 @@
+{
+  "sections": {
+      "template": {
+          "type": "template-search"
+      },
+      "dark-header": {
+          "type": "template-header-dark"
+      }
+  },
+  "order": ["dark-header", "template"]
+}       

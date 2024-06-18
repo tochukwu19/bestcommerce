@@ -1,0 +1,24 @@
+{% style %}
+  .category{
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+{% endstyle %}
+
+<div class="categories my-16">
+  <h2 class="text-3xl text-[#777777] text-center mb-8">
+    Inspired by our multi-ethnic life,<br/>
+    we create fine jewellery to share our wonderful tales…
+  </h2>
+
+  <div class="categories grid grid-cols-[1fr_1fr] grid-rows-[1fr_1fr] md:grid-rows-[1fr] md:grid-cols-[1fr_1fr_1fr] grid-flow-col gap-8 w-[90%] mx-auto">
+    {% for collection in collections limit: 3 %}
+        <a href="{{ collection.url }}">
+            <div class="category relative h-[400px] w-auto" style="background-image: url('{{ collection | img_url: 'large' }}')">
+                <h3 class="absolute text-3xl text-white font-bold bottom-10 right-10">{{ collection.title }}</h3>
+            </div>
+        </a>
+    {% endfor %}
+  </div>
+</div>

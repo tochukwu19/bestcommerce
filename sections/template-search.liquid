@@ -1,0 +1,86 @@
+<div class="container mx-auto search">
+  {% paginate search.results by 4 %}
+    <h1 class="text-3xl font-base my-4 text-center">Search Results</h1>
+
+    <div class="flex justify-center items-center">
+      <form
+        action="{{ routes.search_url }}"
+        method="get"
+        class="border flex rounded">
+        <input
+          type="search"
+          name="q"
+          placeholder="Search"
+          value="{{ search.terms | escape }}"
+          class="px-4 py-2 w-80 border-none outline-none">
+
+        <button type="submit" class="bg-[#CB8161] hover:bg-gray-700 text-white border px-4">Search</button>
+      </form>
+    </div>
+    {% if search.performed %}
+      {% if search.results.size > 0 %}
+        <div class="max-w-6xl mx-auto">
+          <p class="text-gray-500 text-center my-10">{{ search.results.size }} results for the search term {{ search.terms | escape }}</p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {% for item in search.results %}
+              {% case item.object_type %}
+                {% when 'product' %}
+                  {% render 'product-card'
+                    , product: item %}
+
+                {% when 'article' %}
+                  <div class="w-full pb-6 px-3">
+                    <div class="bg-white overflow-hidden">
+                      {% if item.image %}
+                        <a href="{{ item.url }}">
+                          <img
+                            class="w-full h-[300px] object-cover"
+                            src="{{ item.image | img_url: 'medium' }}"
+                            alt="{{ item.image.alt }}">
+                        </a>
+                      {% else %}
+                        {{ 'image' | placeholder_svg_tag: 'w-full h-[300px] object-cover bg-gray-100' }}
+                      {% endif %}
+
+                      <div class="p-4">
+                        <h1 class="text-xl text-[#CB8161] font-medium mt-4">{{ item.title }}</h1>
+
+                        {% if article.excerpt.size > 0 %}
+                          <p class="text-[#777] font-medium">{{ item.excerpt | strip_html | truncatewords: 15 }}</p>
+                        {% else %}
+                          <p class="text-[#777] font-medium">{{ item.content | strip_html | truncatewords: 15 }}</p>
+                        {% endif %}
+                      </div>
+
+
+                    </div>
+
+                  </div>
+
+                {% when 'page' %}
+                    <div class="w-full h-[300px] p-4 text-center flex flex-col justify-center items-center shadow-lg">
+                        <a href="{{ item.url }}" class="pageTitle text-xl text-[#CB8161] hover:text-[#777]">
+                            {{ item.title }}
+                        </a>
+
+                        <p class="text-[#777]">{{ item.content | strip_html | truncatewords: 15 }}</p>
+                    </div>
+              {% else %}
+
+                {% endcase %}
+              {% endfor %}
+            </div>
+          </div>
+
+        {% else %}
+          <div class="text-center my-4">
+            <p>No results found for the search term: {{ search.terms | escape }}. Try to use a different keyword</p>
+          </div>
+        {% endif %}
+      {% endif %}
+
+
+      {% render 'pagination'
+        , pagination: paginate %}
+    {% endpaginate %}
+  </div>

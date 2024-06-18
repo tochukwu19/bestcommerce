@@ -1,0 +1,205 @@
+<form class="h-[500px] overflow-y-scroll w-[80%] bg-white p-8 rounded-md">
+
+  <div @click="showfilter = false" class="ml-auto my-4 w-fit cursor-pointer text-[#777]">{% render "icon-close" %}</div>
+
+  {%- for filter in collection_new.filters -%}
+    <div class="filter-section flex flex-col mb-4">
+      <div class="filter-summary flex justify-between items-center cursor-pointer p-2 bg-[#CB8161] text-white rounded-md">
+        <div class="flex items-center">
+          <span>{{ filter.label }}</span>
+
+          {%- if filter.active_values.size > 0 -%}
+            <span class="ml-2">({{ filter.active_values.size }})</span>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div class="filter-details p-4 border border-[#CB8161] rounded-md mt-2">
+        <div class="flex justify-between items-center mb-4">
+          <p>{{ filter.active_values.size }} selected</p>
+          {%- if filter.active_values.size > 0 -%}
+            <p>
+              <a href="{{ filter.url_to_remove }}" class="text-[#CB8161] underline">Reset</a>
+            </p>
+          {%- endif -%}
+        </div>
+        {%- case filter.type -%}
+          {%- when 'boolean' -%}
+            <ul class="space-y-2">
+              <li>
+                <label for="Filter-{{ filter.param_name }}-{{ filter.true_value.value }}" class="flex items-center">
+                  <input
+                    type="checkbox"
+                    name="{{ filter.param_name }}"
+                    value="{{ filter.true_value.value }}"
+                    id="Filter-{{ filter.param_name }}"
+                    class="mr-2"
+                    {% if filter.true_value.active -%}
+                    checked{%- endif %}
+                    {% if filter.true_value.count == 0 and filter.true_value.active == false -%}
+                    disabled{%- endif %}>{{ filter.true_value.label }}</label>
+              </li>
+              <li>
+                <label for="Filter-{{ filter.param_name }}-{{ filter.false_value.value }}" class="flex items-center">
+                  <input
+                    type="checkbox"
+                    name="{{ filter.param_name }}"
+                    value="{{ filter.false_value.value }}"
+                    id="Filter-{{ filter.param_name }}"
+                    class="mr-2"
+                    {% if filter.false_value.active -%}
+                    checked{%- endif %}
+                    {% if filter.false_value.count == 0 and filter.false_value.active == false -%}
+                    disabled{%- endif %}>{{ filter.false_value.label }}</label>
+              </li>
+            </ul>
+
+            <div class="mt-4">
+              <input
+                type="submit"
+                value="Apply"
+                class="bg-[#CB8161] text-white py-2 px-4 rounded-md cursor-pointer">
+            </div>
+          {%- when 'list' -%}
+            <ul class="space-y-2">
+              {%- for filter_value in filter.values -%}
+                <li>
+                  <label for="Filter-{{ filter.param_name }}-{{ forloop.index }}" class="flex items-center">
+                    <input
+                      type="checkbox"
+                      name="{{ filter_value.param_name }}"
+                      value="{{ filter_value.value }}"
+                      id="Filter-{{ filter.param_name }}-{{ forloop.index }}"
+                      class="mr-2"
+                      {% if filter_value.active -%}
+                      checked{%- endif %}
+                      {% if filter_value.count == 0 and filter_value.active == false -%}
+                      disabled{%- endif %}>
+                    <span class="flex items-center mr-2">
+                      {%- case filter_value.display.type -%}
+                        {%- when 'colors' -%}
+                          {% liquid
+                            assign size_limit = filter_value.display.value.size | at_most: 4
+                            assign rotation = '0deg'
+                            if size_limit == 2
+                              assign rotation = '45deg'
+                            endif
+
+                            assign angle_increment = 360 | divided_by: size_limit
+                            assign angle = 0
+                          %}
+                          {%- capture conic_gradient -%}
+                            {%- for color in filter_value.display.value limit: size_limit -%}
+                              {{ color }} {{ angle }}deg{%- assign angle = angle | plus: angle_increment %} {{ angle }}deg{%- unless forloop.last %}, {%- endunless -%}
+                            {%- endfor -%}
+                          {%- endcapture -%}
+                          <span style="
+                            width: 25px;
+                            height: 25px;
+                            border-radius: 50%;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            background: conic-gradient({{ conic_gradient }}); transform: rotateZ({{ rotation }});
+                          ">
+</span>
+                        {%- when 'image' -%}
+                          {{ filter_value.display.value
+ | image_url: width: 25
+ | image_tag: alt: filter_value.display.value.alt
+                          }}
+                        {%- else -%}
+                          <span class="visual-display__child"></span>
+                      {%- endcase -%}
+                    </span>
+                    {{ filter_value.label }}
+                  </label>
+                </li>
+              {%- endfor -%}
+            </ul>
+
+            <div class="mt-4">
+              <input
+                type="submit"
+                value="Apply"
+                class="bg-[#CB8161] text-white py-2 px-4 rounded-md cursor-pointer">
+            </div>
+          {%- when 'price_range' -%}
+            <div class="filter-group-display__price-range space-y-4">
+              <div class="filter-group-display__price-range-from flex items-center">
+                <span class="mr-2">{{ cart.currency.symbol }}</span>
+
+                <input
+                  name="{{ filter.min_value.param_name }}"
+                  id="Filter-{{ filter.min_value.param_name }}"
+                  class="border p-2 rounded-md w-full"
+                  {% if filter.min_value.value -%}
+                  value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
+                  {%- endif %}
+                  type="number"
+                  placeholder="0"
+                  min="0"
+                  max="{{ filter.range_max | money_without_currency | replace: ',', '' }}">
+
+                <label for="Filter-{{ filter.min_value.param_name }}" class="ml-2">From</label>
+              </div>
+              <div class="filter-group-display__price-range-to flex items-center">
+                <span class="mr-2">{{ cart.currency.symbol }}</span>
+
+                <input
+                  name="{{ filter.max_value.param_name }}"
+                  id="Filter-{{ filter.max_value.param_name }}"
+                  class="border p-2 rounded-md w-full"
+                  {% if filter.max_value.value -%}
+                  value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
+                  {%- endif %}
+                  type="number"
+                  placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                  min="0"
+                  max="{{ filter.range_max | money_without_currency | replace: ',', '' }}">
+
+                <label for="Filter-{{ filter.max_value.param_name }}" class="ml-2">To</label>
+              </div>
+            </div>
+
+            <div class="filter-group-display__submit mt-4">
+              <input
+                type="submit"
+                value="Apply"
+                class="bg-[#CB8161] text-white py-2 px-4 rounded-md cursor-pointer">
+            </div>
+        {%- endcase -%}
+      </div>
+    </div>
+  {%- endfor -%}
+
+  <div class="mt-4">
+    <p>
+      <a href="{{ collection_new.url }}?sort_by={{ collection_new.sort_by }}" class="text-[#CB8161] underline">Clear all</a>
+    </p>
+
+    {%- for filter in collection_new.filters -%}
+      {%- if filter.type == "price_range" -%}
+        {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+          <p class="mt-2">
+            <a href="{{ filter.url_to_remove }}" class="text-[#777]">
+              {%- assign min_value = filter.min_value.value | default: 0 -%}
+              {%- assign max_value = filter.max_value.value | default: filter.range_max -%}
+              {{ min_value | money }} - {{ max_value | money }}
+              <span class="text-red-500">X</span>
+            </a>
+          </p>
+        {%- endif -%}
+      {%- else -%}
+        {%- for filter_value in filter.active_values -%}
+          <p class="mt-2">
+            <a href="{{ filter_value.url_to_remove }}" class="text-[#777]">
+              {{ filter.label }}: {{ filter_value.label }}
+              <span class="text-red-500">X</span>
+            </a>
+          </p>
+        {%- endfor -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</form>

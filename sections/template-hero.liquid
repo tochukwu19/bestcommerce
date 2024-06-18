@@ -1,0 +1,15 @@
+{% style %}
+.hero{
+    background-image: url("{{ 'herobanner.jpg' | file_img_url: 'master' }}");
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+}
+{% endstyle %}
+
+<div class="hero h-screen w-full flex justify-center items-center">
+    <div class="container text-white mx-auto text-center">
+        <h1 class="text-5xl font-bold">Jewellry Collection</h1>
+        <a href="{{ routes.collections_url }}" class="block w-fit mx-auto px-6 py-2 bg-[#CB8161] font-bold mt-6 text-xl">SHOP NOW</a>
+    </div>
+</div>

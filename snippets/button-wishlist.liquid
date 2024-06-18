@@ -1,0 +1,20 @@
+{% style %}
+
+   .active{
+    background-color: white;
+   }
+{% endstyle %}
+
+{%- if product.handle != blank -%}
+  <button
+    type="button"
+    aria-label="Add to wishlist"
+    class="absolute z-10 cursor-pointer inline-block bottom-[1.5rem] right-5 text-white border border-solid border-white p-2 h-[40px] w-[40px]"
+    button-wishlist
+    data-product-handle="{{ product.handle }}">
+
+    <div>
+      {%- render 'icon-heart' -%}
+    </div>
+  </button>
+{%- endif -%}

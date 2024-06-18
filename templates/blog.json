@@ -1,0 +1,12 @@
+{
+  "sections": {
+      "template": {
+          "type": "template-blog"
+      },
+      "dark-header": {
+          "type": "template-header-dark",
+          "settings": {}
+      }
+  },
+  "order": ["dark-header", "template"]
+}

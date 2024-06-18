@@ -1,0 +1,27 @@
+<div class="blog h-auto py-16 bg-[#FDF7F6]">
+  <div class="container mx-auto">
+    <div class="text-center mb-16">
+      <p class="text-[#CB8161] font-bold tracking-wide">NEWS AND INSPIRED</p>
+      <h1 class="text-5xl">Jewellery Style Files</h1>
+    </div>
+
+    <div class="blog-cards grid grid-cols-[1fr_1fr] grid-rows-[1fr_1fr] md:grid-rows-[1fr] md:grid-cols-[1fr_1fr_1fr] grid-flow-col gap-8 w-[90%] mx-auto">
+        {% for article in blogs.news.articles limit: 3 %}
+            <div>
+                <div class="category relative h-[250px] w-auto" style="background-image: url('{{ article | img_url: 'large' }}')">
+
+                </div>
+
+
+                <div class="text-left my-4">
+                    <p class="tracking-wide text-[#777777]">{{ article.published_at | date: format: "abbreviated_date" }}</p>
+                    <div class="flex flex-col justify-center">
+                        <a href="{{ article.url }}" class="blogTitle my-2 font-bold text-black text-2xl">{{ article.title }}</a>
+                        <a href="{{ article.url }}" class="tracking-wide font-bold text-[#CB8161] flex items-center justify-start gap-2">Read More {% render "icon-right" %}</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+  </div>
+</div>

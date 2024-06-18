@@ -1,0 +1,12 @@
+{
+    "sections": {
+        "template": {
+            "type": "template-customer-login"
+        },
+        "dark-header": {
+            "type": "template-header-dark",
+            "settings": {}
+        }
+    },
+    "order": ["dark-header", "template"]
+}

@@ -1,0 +1,158 @@
+{% style %}
+  .collection {
+    .card {
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      width: 100%;
+    }
+
+    .collection-poster {
+      background-image: url("{{ 'collections.jpg' | file_img_url: 'master' }}");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      width: 100%;
+    }
+
+    .overlay {
+      opacity: 0;
+      transition: all ease-in-out 0.3s;
+      /* transform: translateX(50px); */
+      z-index: -1;
+    }
+
+    .card-container:hover .overlay {
+      opacity: 1;
+      /* transform: translateX(0); */
+      z-index: 1;
+    }
+  }
+{% endstyle %}
+
+<div class="collection">
+  <div class="collection-poster h-[300px] w-full text-white text-center flex items-center flex-col justify-center">
+    <h1 class="text-4xl">{{ collection.title }}</h1>
+    {% include 'breadcrumbs' %}
+  </div>
+
+  <div class="cards my-8 w-full mx-auto flex flex-col items-center justify-center">
+    {% paginate collection.products by 3 %}
+      <div class="flex justify-between items-center my-4 w-[80%] mx-auto">
+        <h1 class="text-[#777] text-lg">Showing items {{ paginate.current_offset | plus: 1 }}-{% if paginate.next %}
+            {{ paginate.current_offset | plus: paginate.page_size }}
+          {% else %}
+            {{ paginate.items }}{% endif %}
+          of {{ paginate.items }}.</h1>
+
+        <div class="flex items-center justify-center gap-4">
+          <div class="relative">
+            <select id="sort-by" class="relative w-fit pr-[50px] outline-none appearance-none border border-solid border-[#777] p-2 text-[#777]">
+              {% assign sort_by = collection.sort_by | default: collection.default_sort_by %}
+
+              {% for option in collection.sort_options %}
+                <option
+                  value="{{ option.value }}"
+                  {% if option.value == sort_by %}
+                  selected="selected"
+                  {% endif %}>
+                  {{ option.name }}
+                </option>
+              {% endfor %}
+            </select>
+            <div class="absolute right-5 top-[10px] text-[#777]">{% render "icon-down" %}</div>
+          </div>
+
+          <p @click="showfilter = true" class="cursor-pointer border border-solid border-[#777] p-2 text-[#777] flex items-center gap-2">Filter {% render "icon-filter" %}</p>
+        </div>
+
+        <div
+          x-cloak
+          x-show="showfilter"
+          class="fixed overflow-hidden top-0 left-0 w-screen h-screen bg-white/30 backdrop-blur-sm flex justify-center items-center z-20">
+
+          {% render "filter"
+            , collection_new: collection %}
+        </div>
+
+      </div>
+
+      <div class="w-[90%] mx-auto grid grid-cols-[1fr_1fr] grid-rows-[1fr_1fr] md:grid-rows-[1fr] md:grid-cols-[1fr_1fr_1fr] gap-8">
+
+        {% for product in collection.products %}
+          {% render "product-card", product: product %}
+        {% else %}
+          <p>No products found.</p>
+        {% endfor %}
+
+      </div>
+
+      <div class="pagination [&>a]:block [&>a]:w-fit [&>a]:mx-auto [&>a]:text-white [&>a]:px-6 [&>a]:py-2 [&>a]:bg-[#CB8161] [&>a]:font-bold [&>a]:mt-6 [&>a]:text-xl flex items-center justify-center gap-4 my-4">
+        {% if paginate.previous %}
+          <a href="{{ paginate.previous.url }}" class="btn">Previous</a>
+
+        {% else %}
+          <a class="btn cursor-not-allowed">Previous</a>
+        {% endif %}
+
+        {% if paginate.next %}
+          <a href="{{ paginate.next.url }}" class="btn">Next</a>
+
+        {% else %}
+          <a class="btn cursor-not-allowed">Next</a>
+        {% endif %}
+      </div>
+    {% endpaginate %}
+  </div>
+</div>
+
+<script>
+  // filter dropdown
+  Shopify.queryParams = {};
+  
+  // Preserve existing query parameters
+  if (location.search.length) {
+    var params = location.search.substr(1).split('&');
+  
+    for (var i = 0; i < params.length; i++) {
+      var keyValue = params[i].split('=');
+  
+      if (keyValue.length) {
+        Shopify.queryParams[decodeURIComponent(keyValue[0])] = decodeURIComponent(keyValue[1]);
+      }
+    }
+  }
+  
+  // Update sort_by query parameter on select change
+  document.querySelector('#sort-by').addEventListener('change', function(e) {
+    var value = e.target.value;
+  
+    Shopify.queryParams.sort_by = value;
+    location.search = new URLSearchParams(Shopify.queryParams).toString();
+  });
+</script>
+
+{% comment %} <script>
+    document.querySelectorAll('.add_to_cart').forEach(item => {
+        item.addEventListener('click', event => {
+        const id = item.getAttribute('data-id');
+        
+        console.log(item.getAttribute('data-id'))
+
+        fetch(`/cart/add.js?id=${id}&quantity=1`, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            window.location.href = '/cart';
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+        });
+    });
+</script> {% endcomment %}

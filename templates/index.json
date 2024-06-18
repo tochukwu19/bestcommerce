@@ -1,0 +1,54 @@
+{
+    "sections": {
+        "hero": {
+            "type": "template-hero",
+            "settings": {
+            }
+        },
+        "category": {
+            "type": "hero-categories",
+            "settings": {
+            }
+        },
+        "favorites": {
+            "type": "hero-favourites",
+            "settings": {
+            }
+        },
+        "standout": {
+            "type": "hero-standout",
+            "settings": {
+            }
+        },
+        "blog": {
+            "type": "hero-blog",
+            "settings": {
+            }
+        },
+        "news": {
+            "type": "hero-news",
+            "settings": {
+            }
+        },
+        "embed": {
+            "type": "hero-embed",
+            "settings": {
+            }
+        },
+        "header": {
+            "type": "template-header",
+            "settings": {
+            }
+        }
+    },
+    "order": [
+        "header",
+        "hero",
+        "category",
+        "favorites",
+        "standout",
+        "blog",
+        "news",
+        "embed"
+    ]
+}

@@ -1,0 +1,30 @@
+{% style %}
+  .embed {
+    background-image: url("{{ 'embed.jpg' | file_img_url: 'master' }}");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+{% endstyle %}
+
+<div class="embed h-[300px] w-full flex items-center justify-center" x-data="{showvideo: false}">
+  <div @click="showvideo=true">
+    <img src="{{ "playbtn.gif" |  file_img_url: 'small'}}" alt="play button" />
+  </div>
+
+  <div
+    x-cloak
+    x-show="showvideo"
+    @click="showvideo=false"
+    class="embed-video fixed h-screen w-screen bg-white/30 top-0 flex items-center justify-center backdrop-blur-sm">
+    <iframe
+      width="560"
+      height="315"
+      src="https://www.youtube.com/embed/xopvkx6CpNs?si=xDcz3NHJbjhHRrjb"
+      title="YouTube video player"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allowfullscreen></iframe>
+  </div>
+</div>

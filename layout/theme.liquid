@@ -6,15 +6,53 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="description" content="{{ page_description | escape }}">
     <link rel="canonical" href="{{ canonical_url }}">
-    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width,-scale=1,shrink-to-fit=no">
     {{ content_for_header }}
+
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script src="{{ 'wishlist.js' | asset_url }}" defer="defer">
+  </script>
+
     <!-- Header hook for plugins -->
     {{ 'application.css' | asset_url | stylesheet_tag }}
     {{ 'application.js' | asset_url | script_tag }}
+
+    <style>
+      [x-cloak] {
+        display: none !important;
+      }
+
+      {% assign body_font = settings.typography_font %}{{ body_font | font_face }}{% assign heading_font = settings.typography_heading_font %}{{ heading_font | font_face }}*,
+      body {
+        font-family: {{ body_font.family }}, 
+        {{ body_font.fallback_families }};
+      }
+
+      h1,
+      .blogTitle,
+      .pageTitle,
+      .logo a {
+        font-family: {{ heading_font.family }}, 
+        {{ heading_font.fallback_families }};
+      }
+
+      .categories,
+      .collections,
+      .product-recommendations {
+        h2 {
+          font-family: {{ heading_font.family }}, 
+          {{ heading_font.fallback_families }};
+        }
+      }
+    </style>
+
   </head>
-  <body class="bg-red-900">
+  <body x-data="{showfilter: false}">
     <main role="main">
       {{ content_for_layout }}
     </main>
+    {% section "footer" %}
+
   </body>
 </html>

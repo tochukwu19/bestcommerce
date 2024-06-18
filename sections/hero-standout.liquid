@@ -1,0 +1,17 @@
+{% style %}
+.standout{
+    background-image: url("{{ 'standbanner.jpg' | file_img_url: 'master' }}");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+{% endstyle %}
+
+<div class="standout w-full h-[350px] flex justify-end items-center">
+    <div class="w-[80%] mx-auto flex justify-center flex-col items-end">
+        <div class="flex justify-center items-center flex-col">
+            <h1 class="text-5xl text-white">Stand Out In Style</h1>
+            <button class="px-6 py-2 bg-[#CB8161] font-bold mt-6 text-xl text-white">SHOP NOW</button>
+        </div>
+    </div>
+</div>

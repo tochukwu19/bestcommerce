@@ -1,0 +1,26 @@
+{% style %}
+.news-bg{
+    background-image: url("{{ 'news.jpg' | file_img_url: 'master' }}");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+{% endstyle %}
+
+<div class="news w-full h-auto py-16 flex justify-center items-center">
+    <div class="container w-[90%] flex justify-between items-center gap-2">
+        <form>
+            <h1 class="text-2xl">NEWSLETTER</h1>
+            <p class="text-xl text-[#777777]">Join to receive our many offers as well as discount information!</p>
+
+            <div class="flex items-center gap-4 my-4">
+                <input name="email" type="email" placeholder="Your Email.." class="border border-[#777777] p-[10px] w-full"/>
+                <button type="submit" class="px-6 py-2 bg-[#CB8161] text-white font-bold text-xl">SUBSCRIBE</button>
+            </div>
+        </form>
+
+        <div class="news-bg h-[300px] w-1/2">
+
+        </div>
+    </div>
+</div>

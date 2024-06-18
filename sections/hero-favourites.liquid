@@ -1,0 +1,68 @@
+<div class="favourites h-auto py-16 bg-[#FDF7F6]">
+  <div class="container mx-auto">
+    <div class="text-center mb-16">
+      <p class="text-[#CB8161] font-bold tracking-wide">DISCOVER THIS WEEK’S</p>
+      <h1 class="text-5xl">Jewellery Favourites</h1>
+    </div>
+
+    <div class="fav-cards grid grid-cols-[1fr_1fr] grid-rows-[1fr_1fr] md:grid-rows-[1fr] md:grid-cols-[1fr_1fr_1fr_1fr] grid-flow-col gap-8 w-[90%] mx-auto">
+      {% for product in collections.best-sellers.products limit: 4 %}
+
+        {% assign price = product.selected_or_first_available_variant.price %}
+        {% assign compare_at_price = product.selected_or_first_available_variant.compare_at_price %}
+        {% assign discount_percentage = compare_at_price
+        | minus: price
+        | times: 100.0
+        | divided_by: compare_at_price
+        %}
+
+        <form
+          action="/cart/add"
+          method="post"
+          class="relative">
+          <button
+            type="button"
+            data-id="{{ product.variants.first.id }}"
+            class="absolute z-10 add_to_cart cursor-pointer inline-block bottom-[6.5rem] right-5 text-white border border-solid border-white p-2">{% render "icon-shopping-cart" %}</button>
+
+          <a href="{{ product.url }}">
+            <div class="category relative h-[350px] w-auto" style="background-image: url('{{ product | img_url: 'large' }}')">
+              <p class="absolute top-5 left-5 bg-[#CB8161] px-2 text-white">-{{ discount_percentage | round: 0 }}%</p>
+            </div>
+
+
+            <div class="text-center my-4">
+              <h3 class="text-xl">{{ product.title }}</h3>
+              <div class="flex gap-2 item-center justify-center">
+                <p class="line-through font-bold">{{ product.compare_at_price | money }}</p>
+                <p class="text-[#CB8161] font-bold">{{ product.price | money }}</p>
+              </div>
+            </div>
+          </a>
+        </form>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<script>
+    document.querySelectorAll('.add_to_cart').forEach(item => {
+        item.addEventListener('click', event => {
+        const id = item.getAttribute('data-id');
+        fetch(`/cart/add.js?id=${id}&quantity=1`, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            window.location.href = '/cart';
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+        });
+    });
+</script>

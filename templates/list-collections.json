@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "header-dark": {
+      "type": "template-header-dark",
+      "settings": {}
+    },
+    "collections": {
+      "type": "template-collections",
+      "settings": {}
+    }
+  },
+  "order": [
+    "header-dark",
+    "collections"
+  ]
+}
