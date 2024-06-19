@@ -5,7 +5,12 @@
       background-position: center;
       background-repeat: no-repeat;
       width: 100%;
+      transition: all ease-in-out 0.5s;
     }
+
+    /* .card-container:hover .card {
+      background-size: 110%;
+    } */
 
     .overlay {
       opacity: 0;
@@ -37,7 +42,9 @@
     <div>
       <div class="card-container relative h-[300px] w-auto">
         <div class="card absolute h-[300px] w-auto" style="background-image: url('{{ product | img_url: 'large' }}')">
-          <p class="absolute top-5 left-5 bg-[#CB8161] px-2 text-white">-{{ discount_percentage | round: 0 }}%</p>
+          {% if settings.product_card_show_discount %}
+            <p class="absolute top-5 left-5 bg-[#CB8161] px-2 text-white">-{{ discount_percentage | round: 0 }}%</p>
+          {% endif %}
         </div>
 
         <div class="overlay absolute h-[300px] w-full bg-gray-500/30">
@@ -46,8 +53,10 @@
             data-id="{{ product.variants.first.id }}"
             class="absolute z-10 add_to_cart cursor-pointer inline-block bottom-[4.5rem] right-5 text-white border border-solid border-white p-2">{% render "icon-shopping-cart" %}</button>
 
-          {% render "button-wishlist"
-            , product: product %}
+          {% if settings.product_card_show_wishlist_button %}
+            {% render "button-wishlist"
+              , product: product %}
+          {% endif %}
         </div>
       </div>
 
@@ -65,9 +74,9 @@
         </div>
       </div>
     </div>
-
   </form>
 </div>
+
 
 <script>
         document.querySelectorAll('.add_to_cart').forEach(item => {

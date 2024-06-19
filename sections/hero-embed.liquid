@@ -1,10 +1,6 @@
 {% style %}
   .embed {
-    background-image: url("{{ 'embed.jpg' | file_img_url: 'master' }}");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-  }
+    background-image: url("{% if section.settings.image == blank %} {{ 'embed.jpg' | file_img_url: 'master' }} {% else %} {{ section.settings.image | img_url: '1920x1080' }} {% endif"%}"); background-size: cover; background-position: center; background-repeat: no-repeat; }
 {% endstyle %}
 
 <div class="embed h-[300px] w-full flex items-center justify-center" x-data="{showvideo: false}">
@@ -20,11 +16,29 @@
     <iframe
       width="560"
       height="315"
-      src="https://www.youtube.com/embed/xopvkx6CpNs?si=xDcz3NHJbjhHRrjb"
+      src="{{ section.settings.embed_link | split: '?' | first | append: "?autoplay=1" }}"
       title="YouTube video player"
       frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
       referrerpolicy="strict-origin-when-cross-origin"
       allowfullscreen></iframe>
   </div>
 </div>
+
+{% schema %}
+  {
+    "name": "Hero Embed",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Embed Image"
+      }, {
+        "type": "text",
+        "id": "embed_link",
+        "label": "Paste Embed Link Here",
+        "default": "https://www.youtube.com/embed/xopvkx6CpNs?si=xDcz3NHJbjhHRrjb"
+      }
+    ]
+  }
+{% endschema %}

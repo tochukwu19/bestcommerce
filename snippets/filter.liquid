@@ -1,4 +1,25 @@
-<form class="h-[500px] overflow-y-scroll w-[80%] bg-white p-8 rounded-md">
+<style>
+  .formWithScrollBar::-webkit-scrollbar-thumb{
+    background-color: #CB8161;
+  }
+  .formWithScrollBar::-webkit-scrollbar-track{
+    background-color: #F5F5F5;
+  }
+  .formWithScrollBar::-webkit-scrollbar{
+    width: 5px;
+  }
+  .formWithScrollBar::-webkit-scrollbar-thumb:hover{
+    background-color: #CB8161;
+  }
+  .formWithScrollBar::-webkit-scrollbar-thumb:active{
+    background-color: #CB8161;
+  }
+  .formWithScrollBar::-webkit-scrollbar-button{
+    display: none;
+  }
+</style>
+
+<form class="formWithScrollBar h-[500px] overflow-y-scroll w-[90%] md:w-[80%] bg-white p-8 rounded-md">
 
   <div @click="showfilter = false" class="ml-auto my-4 w-fit cursor-pointer text-[#777]">{% render "icon-close" %}</div>
 

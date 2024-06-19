@@ -3,18 +3,23 @@
 {% style %}
 
 .header{
-    transition: all 0.3s;
+    transition: all 0.5s;
     position: absolute;
     width: 100%;
     background-color: transparent;
+}
+
+.sticky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: white;
+    height: 80px;
     
-    .sticky {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        z-index: 1000;
-        background-color: white;
+    a, p, .hamburger, h1{
+        color: #000;
     }
 }
 
@@ -56,17 +61,17 @@
                 <p class="uppercase text-white font-bold">{{ shop.locale }}</p>
 
                 <p class="uppercase text-white font-bold">{{ shop.currency }}</p>
+            </div>
 
-                <div class="-mr-2 -my-2 ml-3">
+            <div class="-mr-2 -my-2 ml-3 md:hidden block">
                 <button x-on:click=" mobileMenuOpen = true" type="button"
-                    class="text-white p-2 inline-flex items-center justify-center focus:outline-none">
+                    class="hamburger text-white p-2 inline-flex items-center justify-center focus:outline-none">
                     {% render "hamburger" %}
                 </button>
             </div>
-            </div>
         </div>
 
-        <div x-show="mobileMenuOpen" class="absolute z-10 top-0 inset-x-0 p-2 transform origin-top-left md:hidden">
+        <div x-cloak x-show="mobileMenuOpen" class="absolute z-10 top-0 inset-x-0 p-2 transform origin-top-left md:hidden">
             <div class="shadow-lg rounded-lg ring-1 ring-black ring-opacity-5 bg-white w-full">
                 <div class="p-5 divide-y-2 divide-gray-50">
 
@@ -78,7 +83,7 @@
                         <div class="-mr-2">
                             <button x-on:click=" mobileMenuOpen = false " type="button"
                                 class="bg-white rounded-md p-2 text-gray-500">
-                                X
+                                {% render "icon-close" %}
                             </button>
                         </div>
                     </div>
@@ -115,7 +120,8 @@
 
                         {% else %}
 
-                        <a href="{{ link.url }}"
+                        <a 
+                            href='{%if link.title == 'Cart' %} {{ routes.cart_url }} {% elsif link.title == 'My Account' %} {{ routes.account_login_url }} {% else %}  {{ link.url }} {% endif %}'
                             class="-m-3 p-3 flex items-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-50">
                             {{ link.title}}
                         </a>
@@ -131,11 +137,18 @@
 </div>
 
 <script type="text/javascript">
-    // window.addEventListener('scroll', function () {
-    //     var header = document.querySelector('.header');
+    window.addEventListener('scroll', function () {
+        var header = document.querySelector('.header');
 
-    //     header.classList.toggle('sticky', window.scrollY > 0);
-    // });
+        header.classList.toggle('sticky', window.scrollY > 0);
+
+        // a method to change the logo images when the header is sticky
+        if (header.classList.contains('sticky')) {
+            document.querySelector('.logo img').src = "{{ 'sparkle.png' | file_img_url }}";
+        } else {
+            document.querySelector('.logo img').src = "{{ 'sparklewhite.png' | file_img_url }}";
+        }
+    });
 </script>
 
 {% schema %}

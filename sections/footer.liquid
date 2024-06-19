@@ -7,8 +7,8 @@
             <h1 class="text-4xl text-gray-900 font-bold truncate capitalize">Belliza</h1>
         </div>
 
-        <nav class="flex w-[80%] mx-auto justify-between items-start [&>div>h1]:mb-4 flex-wrap">
-            <div>
+        <nav class="flex w-[80%] mx-auto flex-col md:flex-row justify-between items-start [&>div>h1]:mb-4 flex-wrap">
+            <div class="mb-8 md:mb-0">
                 <h1 class="text-2xl [&>p]:my-2">Contact Info</h1>
                 <p class="text-lg text-[#777777]">+123 456 789</p>
                 <p class="text-lg text-[#777777]">info@free.com</p>
@@ -21,7 +21,7 @@
 
             {% for link in linklists['footer'].links %}
                 {% if link.links != blank %}
-                    <div class="[&>ul>a]:block [&>ul>a]:text-lg [&>ul>a]:text-[#777777] [&>ul>a]:my-2">
+                    <div class="mb-8 md:mb-0 [&>ul>a]:block [&>ul>a]:text-lg [&>ul>a]:text-[#777777] [&>ul>a]:my-2">
                         <h1 class="text-2xl">{{ link.title }}</h1>
                         <ul>
                             {% for sublink in link.links %}
@@ -36,5 +36,25 @@
 </div>
 
 <div class="h-[100px] w-full flex items-center justify-center">
-    <div class="container text-[#777] mx-auto w-[90%]"><p>© Belliza All Rights Reserved. Theme by <span class="underline">Toch</span></div>
+    <div class="container text-[#777] mx-auto w-[90%]"><p>{{ section.settings.disclaimer }}<span class="underline">{{ section.settings.developer  }}</span></div>
 </div>
+
+{% schema %}
+{
+    "name": "Footer",
+    "settings": [
+        {
+            "type": "text",
+            "id": "disclaimer",
+            "label": "Disclaimer",
+            "default": "© Belliza All Rights Reserved. Theme by"
+        },
+        {
+            "type": "text",
+            "id": "developer",
+            "label": "Developer",
+            "default": "Teecxdes"
+        }           
+    ]
+}
+{% endschema %}

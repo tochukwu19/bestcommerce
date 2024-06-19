@@ -1,26 +1,58 @@
 {% style %}
-.news-bg{
-    background-image: url("{{ 'news.jpg' | file_img_url: 'master' }}");
+  .news-bg {
+    background-image: 
+    url("{% if section.settings.image == blank %} {{ 'news.jpg' | file_img_url: 'master' }} {% else %} {{ section.settings.image | img_url: '1920x1080' }} {% endif"%}"); 
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-}
+  }
 {% endstyle %}
 
 <div class="news w-full h-auto py-16 flex justify-center items-center">
-    <div class="container w-[90%] flex justify-between items-center gap-2">
-        <form>
-            <h1 class="text-2xl">NEWSLETTER</h1>
-            <p class="text-xl text-[#777777]">Join to receive our many offers as well as discount information!</p>
+  <div class="container w-[90%] flex flex-col md:flex-row justify-between items-center gap-2">
+    <form>
+      <h1 class="text-2xl">{{ section.settings.title }}</h1>
+      <p class="text-xl text-[#777777]">{{ section.settings.subtitle  }}</p>
 
-            <div class="flex items-center gap-4 my-4">
-                <input name="email" type="email" placeholder="Your Email.." class="border border-[#777777] p-[10px] w-full"/>
-                <button type="submit" class="px-6 py-2 bg-[#CB8161] text-white font-bold text-xl">SUBSCRIBE</button>
-            </div>
-        </form>
+      <div class="flex items-center gap-4 my-4">
+        <input
+          name="email"
+          type="email"
+          placeholder="Your Email.."
+          class="border border-[#777777] p-[10px] w-full" />
+        <button type="submit" class="px-6 py-2 bg-[#CB8161] text-white font-bold text-xl">{{ section.settings.button_text }}</button>
+      </div>
+    </form>
 
-        <div class="news-bg h-[300px] w-1/2">
-
-        </div>
-    </div>
+    <div class="news-bg h-[300px] w-full md:w-1/2"></div>
+  </div>
 </div>
+
+{% schema %}
+  {
+    "name": "Hero News",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "News Image"
+      }, {
+        "type": "text",
+        "id": "title",
+        "label": "News Title",
+        "default": "NEWSLETTER"
+      }, {
+        "type": "text",
+        "id": "subtitle",
+        "label": "News Sub Title",
+        "default": "Join to receive our many offers as well as discount information!"
+      }, {
+        "type": "text",
+        "id": "button_text",
+        "label": "Button Text",
+        "default": "SUBSCRIBE"
+      }
+
+    ]
+  }
+{% endschema %}

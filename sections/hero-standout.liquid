@@ -1,17 +1,46 @@
 {% style %}
-.standout{
-    background-image: url("{{ 'standbanner.jpg' | file_img_url: 'master' }}");
+  .standout {
+    background-image: 
+    url("{% if section.settings.image == blank %} {{ 'standbanner.jpg' | file_img_url: 'master' }} {% else %} {{ section.settings.image | img_url: '1920x1080' }} {% endif"%}"); 
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-}
+  }
 {% endstyle %}
 
 <div class="standout w-full h-[350px] flex justify-end items-center">
-    <div class="w-[80%] mx-auto flex justify-center flex-col items-end">
-        <div class="flex justify-center items-center flex-col">
-            <h1 class="text-5xl text-white">Stand Out In Style</h1>
-            <button class="px-6 py-2 bg-[#CB8161] font-bold mt-6 text-xl text-white">SHOP NOW</button>
-        </div>
+  <div class="w-[80%] mx-auto flex justify-center flex-col items-center md:items-end px-2 md:px-0">
+    <div class="flex justify-center items-center flex-col">
+      <h1 class="text-3xl md:text-5xl text-white">{{ section.settings.title }}</h1>
+      <a href="{{ section.settings.button_url }}" class="px-6 py-2 bg-[#CB8161] font-bold mt-6 text-lg md:text-xl text-white">{{ section.settings.button_text}}</a>
     </div>
+  </div>
 </div>
+
+{% schema %}
+  {
+    "name": "Hero Standout",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Background Image"
+      }, {
+        "type": "text",
+        "id": "title",
+        "label": "Title",
+        "default": "Stand Out In Style"
+      }, {
+        "type": "url",
+        "id": "button_url",
+        "label": "Button URL",
+        "default": "/collections/all"
+      }, {
+        "type": "text",
+        "id": "button_text",
+        "label": "Button Text",
+        "default": "SHOP NOW"
+      }
+    ]
+  }
+{% endschema %}

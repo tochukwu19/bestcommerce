@@ -23,5 +23,22 @@
         "default": "cormorant_n5"
       }
     ]
+  },
+  {
+    "name": "Product Card",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "product_card_show_discount",
+        "label": "Show discount",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "product_card_show_wishlist_button",
+        "label": "Show wishlist button",
+        "default": true
+      }
+    ]
   }
 ]

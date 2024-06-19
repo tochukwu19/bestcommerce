@@ -1,27 +1,75 @@
+{% style %}
+  .blog-cards {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+{% endstyle %}
+
+
 <div class="blog h-auto py-16 bg-[#FDF7F6]">
   <div class="container mx-auto">
     <div class="text-center mb-16">
-      <p class="text-[#CB8161] font-bold tracking-wide">NEWS AND INSPIRED</p>
-      <h1 class="text-5xl">Jewellery Style Files</h1>
+      <p class="text-[#CB8161] font-bold tracking-wide">{{ section.settings.subtitle }}</p>
+      <h1 class="text-5xl">{{ section.settings.title }}</h1>
     </div>
 
-    <div class="blog-cards grid grid-cols-[1fr_1fr] grid-rows-[1fr_1fr] md:grid-rows-[1fr] md:grid-cols-[1fr_1fr_1fr] grid-flow-col gap-8 w-[90%] mx-auto">
-        {% for article in blogs.news.articles limit: 3 %}
-            <div>
-                <div class="category relative h-[250px] w-auto" style="background-image: url('{{ article | img_url: 'large' }}')">
+    <div class="blog-cards grid gap-8 w-[90%] mx-auto">
+      {% for article in blogs.news.articles limit: section.settings.number_of_blog_posts %}
+        <div>
+          <div class="zoom">
+            <div class="category child transition duration-500 ease-in-out relative h-[250px] w-auto" style="background-image: url('{{ article | img_url: 'large' }}')"></div>
+          </div>
 
-                </div>
 
-
-                <div class="text-left my-4">
-                    <p class="tracking-wide text-[#777777]">{{ article.published_at | date: format: "abbreviated_date" }}</p>
-                    <div class="flex flex-col justify-center">
-                        <a href="{{ article.url }}" class="blogTitle my-2 font-bold text-black text-2xl">{{ article.title }}</a>
-                        <a href="{{ article.url }}" class="tracking-wide font-bold text-[#CB8161] flex items-center justify-start gap-2">Read More {% render "icon-right" %}</a>
-                    </div>
-                </div>
+          <div class="text-left my-4">
+            <p class="tracking-wide text-[#777777]">{{ article.published_at | date: format: "abbreviated_date" }}</p>
+            <div class="flex flex-col justify-center">
+              <a href="{{ article.url }}" class="blogTitle my-2 font-bold text-black text-2xl">{{ article.title }}</a>
+              <a href="{{ article.url }}" class="tracking-wide font-bold text-[#CB8161] flex items-center justify-start gap-2">{{ section.settings.blog_read_more }} {% render "icon-right" %}</a>
             </div>
-        {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
     </div>
   </div>
 </div>
+
+{% schema %}
+  {
+    "name": "Blog News",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title",
+        "default": "Jewellery Style Files"
+      }, {
+        "type": "text",
+        "id": "subtitle",
+        "label": "Sub Title",
+        "default": "NEWS AND INSPIRED"
+      }, {
+        "type": "text",
+        "id": "blog_read_more",
+        "label": "Read more label",
+        "default": "Read more"
+      }, {
+        "type": "range",
+        "id": "number_of_blog_posts",
+        "step": 1,
+        "min": 1,
+        "max": 10,
+        "label": "Number of blog posts",
+        "default": 4
+      }
+    ],
+    "presets": [
+      {
+        "category": "Blog",
+        "name": "Blog News",
+        "settings": {
+          "number_of_blog_posts": 3
+        }
+      }
+    ]
+  }
+{% endschema %}

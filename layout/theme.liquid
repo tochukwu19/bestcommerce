@@ -45,6 +45,15 @@
           {{ heading_font.fallback_families }};
         }
       }
+
+      .zoom {
+        overflow: hidden;
+      }
+
+      .zoom:hover .child,
+      .zoom:focus .child {
+        transform: scale(1.2);
+      }
     </style>
 
   </head>
