@@ -32,7 +32,7 @@
     {% paginate collections by 3 %}
       <div class="w-[90%] mx-auto grid gap-8">
         {% for collection in collections %}
-          <a href="{{ collection.url }}">
+          <a href="{{ collection.url }}" data-aos="fade-down" data-aos-delay="{{ forloop.index0 |  times: 100}}">
             <div class="collection relative h-[400px] w-auto" style="background-image: url('{{ collection | img_url: 'large' }}')">
               <h2 class="absolute text-3xl text-white font-bold bottom-[50px] right-10">{{ collection.title }}</h2>
               <p class="absolute text-lg text-white font-bold bottom-[20px] right-10">{{ collection.products_count }} Products</p>

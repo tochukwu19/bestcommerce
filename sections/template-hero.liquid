@@ -1,76 +1,104 @@
-{% style %}
+<link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+
+<style>
   .hero {
-    background-image: 
-    url("{% if section.settings.image == blank %} {{ 'herobanner.jpg' | file_img_url: 'master' }} {% else %} {{ section.settings.image | img_url: '1920x1080' }} {% endif"%}"); 
-    background-size: cover; 
-    background-position: center; 
-    background-repeat: no-repeat;
-    /* background-attachment: fixed; */
-    width: 100%; 
-}
-{% endstyle %}
-
-<div class="hero h-screen w-full flex justify-center items-center">
-  <div class="container text-white mx-auto text-center px-4 md:px-0">
-    <h1 class="text-4xl md:text-5xl font-bold">{{ section.settings.hero_title }}</h1>
-    <a href="{{ section.settings.button_url }}" class="block w-fit mx-auto px-6 py-2 bg-[#CB8161] font-bold mt-6 text-lg md:text-xl">{{ section.settings.button_text }}</a>
-  </div>
-</div>
-
-
-<script>
-  // function to add very slight zoom effect as user scrolls and accounts for smaller screens
-  window.addEventListener('scroll', function() {
-    var value = window.scrollY;
-    var hero = document.querySelector('.hero');
-    var start = 400;
-
-    // if screen is smaller than 1024px, set start to 200
-    if (window.innerWidth > 800) {
-      start = 200;
-    }
-
-    // if screen is resized reset the start value
-    window.addEventListener('resize', function() {
-      if (window.innerWidth > 800) {
-        start = 200;
-      } else {
-        start = 400;
-      }
-    });
-
-    hero.style.backgroundSize = start + value * 0.1 + '%';
-  });
-
-
-
+      background-image: url("{% if section.settings.image == blank %} {{ 'herobanner.jpg' | file_img_url: 'master' }} {% else %} {{ section.settings.image | img_url: '1920x1080' }} {% endif"%}"); background-size: cover; background-position: center; background-repeat: no-repeat; /* background-attachment: fixed; */ width: 100%;
+      transition: all ease-in-out 0.5s;
+     } 
+      .swiper-button-prev, .swiper-button-next { color: white; top: auto !important; height: 20px; } 
+      .swiper-button-prev::after, .swiper-button-next::after { font-size: 20px; } 
+      .swiper-pagination { color: white; bottom: 0 !important; } .swiper-pagination-bullet-active { background: white !important; }
+  </style>  
   
-</script>
+  <div class="hero h-screen w-full flex justify-center items-center"> 
+    <div class="swiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <div class="container text-white mx-auto text-center px-4 md:px-0">
+              <h1 class="text-4xl md:text-5xl font-bold" data-aos="fade-down">{{ section.settings.hero_title }}</h1>
+              <a href="{{ section.settings.button_url }}" class="block w-fit mx-auto px-6 py-2 bg-[#CB8161] font-bold mt-6 text-lg md:text-xl">{{ section.settings.button_text }}</a>
+            </div>
+          </div>
+      
+          <div class="swiper-slide">
+            <div class="container text-white mx-auto text-center px-4 md:px-0">
+              <h1 class="text-4xl md:text-5xl font-bold" data-aos="fade-down">Explore our selection</h1>
+              <a href="{{ section.settings.button_url }}" class="block w-fit mx-auto px-6 py-2 bg-[#CB8161] font-bold mt-6 text-lg md:text-xl">{{ section.settings.button_text }}</a>
+            </div>
+          </div>
+      
+          <div class="swiper-slide">
+            <div class="container text-white mx-auto text-center px-4 md:px-0">
+              <h1 class="text-4xl md:text-5xl font-bold" data-aos="fade-down">Check out our collection here!</h1>
+              <a href="{{ section.settings.button_url }}" class="block w-fit mx-auto px-6 py-2 bg-[#CB8161] font-bold mt-6 text-lg md:text-xl">{{ section.settings.button_text }}</a>
+            </div>
+          </div>
+        </div>
+      
+        <div class="w-full absolute top-[50px] bottom-0 flex items-center">
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
+        </div>
+    </div>
+  </div>
+  
 
-{% schema %}
-  {
-    "name": "Hero",
-    "settings": [
-      {
-        "type": "image_picker",
-        "id": "image",
-        "label": "Hero Image"
-      }, {
-        "type": "text",
-        "id": "hero_title",
-        "label": "Hero Title",
-        "default": "Jewellry Collection"
-      }, {
-        "type": "url",
-        "id": "button_url",
-        "label": "Button URL",
-        "default": "/collections/all"
-      }, {
-        "type": "text",
-        "id": "button_text",
-        "label": "Button Text",
-        "default": "SHOP NOW"
-      }
-    ]
-  }
-{% endschema %}
+  <script>
+    // Swiper code init
+    const swiper = new Swiper('.swiper', {
+        direction: 'horizontal',
+      
+        pagination: {
+            el: '.swiper-pagination'
+        },
+      
+        navigation: {
+            prevEl: '.swiper-button-prev',
+            nextEl: '.swiper-button-next'
+        }
+    })
+  </script>
+
+  <script>
+    // function that changes hero background image on every swipe of the swiper, each slide has a different image
+    swiper.on('slideChange', function() {
+      var hero = document.querySelector('.hero');
+      var currentSlide = swiper.realIndex;
+      var images = [
+        '{{ 'herobanner.jpg' | file_img_url: 'master' }}',
+        '{{ 'herobanner2.jpg' | file_img_url: 'master' }}',        
+        '{{ 'herobanner3.jpg' | file_img_url: 'master' }}'
+      ];
+    
+      hero.style.backgroundImage = 'url(' + images[currentSlide] + ')';
+    });
+  </script>
+  
+  {% schema %}
+    {
+      "name": "Hero",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Hero Image"
+        }, {
+          "type": "text",
+          "id": "hero_title",
+          "label": "Hero Title",
+          "default": "Jewellry Collection"
+        }, {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button URL",
+          "default": "/collections/all"
+        }, {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "SHOP NOW"
+        }
+      ]
+    }
+  {% endschema %}

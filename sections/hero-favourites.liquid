@@ -14,7 +14,9 @@
     <div class="fav-cards grid gap-8 w-[90%] mx-auto">
       {% for product in collections.best-sellers.products limit: 4 %}
 
-        {% render "product-card", product: product %}
+        <div data-aos="fade-down" data-aos-delay="{{ forloop.index0 |  times: 100}}">
+          {% render "product-card", product: product %}
+        </div>
       {% endfor %}
     </div>
   </div>
